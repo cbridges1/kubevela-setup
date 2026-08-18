@@ -1,0 +1,8 @@
+# Locally-built CLIs (scripts/build-vela-cli.sh)
+/bin/
+
+# Editor/IDE
+ .idea/
+ .vscode/
+
+.env

@@ -1,0 +1,26 @@
+version: "3"
+
+tasks:
+  default:
+    desc: List available tasks
+    cmd: task --list
+
+  cluster:local:
+    desc: Create (idempotently) a standalone k3d cluster for local KubeVela dev, with host 80/443 mapped to k3d's Traefik ingress — run this once before install:local. Sets your kubectl context to it. Needs k3d.
+    cmd: bash ./scripts/create-local-cluster.sh {{.CLI_ARGS}}
+
+  cluster:destroy:
+    desc: Delete the local k3d cluster.
+    cmd: bash ./scripts/destroy-local-cluster.sh {{.CLI_ARGS}}
+
+  install:local:
+    desc: Build vela-core from KUBEVELA_SRC (defaults to ../kubevela) and install it onto whatever cluster your kubectl context points at — run `task cluster:local` first. Persistent, not a self-cleaning smoke test. Needs docker/kubectl/helm.
+    cmd: bash ./scripts/install-local.sh {{.CLI_ARGS}}
+
+  build:cli:
+    desc: Build the vela + kubectl-vela CLIs from KUBEVELA_SRC into ./bin. Needs go.
+    cmd: bash ./scripts/build-vela-cli.sh
+
+  logs:
+    desc: Tail the vela-core controller logs.
+    cmd: kubectl -n vela-system logs -l controller.oam.dev/name=vela-core -f
