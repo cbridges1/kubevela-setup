@@ -24,3 +24,11 @@ tasks:
   logs:
     desc: Tail the vela-core controller logs.
     cmd: kubectl -n vela-system logs -l controller.oam.dev/name=vela-core -f
+
+  deploy:example:
+    desc: Deploy examples/hello-world-app.yaml (webservice + ingress) to smoke-test the cluster — run after install:local. curl http://hello-world.127.0.0.1.nip.io once it's up.
+    cmd: kubectl apply -f examples/hello-world-app.yaml
+
+  undeploy:example:
+    desc: Remove the example Application deployed by deploy:example.
+    cmd: kubectl delete -f examples/hello-world-app.yaml --ignore-not-found

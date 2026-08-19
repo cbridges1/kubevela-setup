@@ -1,0 +1,30 @@
+# KubeVela's canonical "first-vela-app" quickstart sample (see
+# KUBEVELA_SRC/docs/examples/vela-app.yaml), adapted with a nip.io domain so
+# the Ingress resolves to this machine's loopback without editing /etc/hosts
+# — pairs with this repo's k3d cluster, which maps host 80/443 to Traefik.
+#
+# `webservice`, `ingress-1-20`, and `scaler` all ship built into the
+# vela-core chart itself (charts/vela-core/templates/defwithtemplate/ in
+# KUBEVELA_SRC), so this applies cleanly right after install:local — no
+# addons needed.
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: hello-world
+  namespace: default
+spec:
+  components:
+    - name: hello-world
+      type: webservice
+      properties:
+        image: crccheck/hello-world
+        port: 8000
+      traits:
+        - type: ingress-1-20
+          properties:
+            domain: hello-world.127.0.0.1.nip.io
+            http:
+              "/": 8000
+        - type: scaler
+          properties:
+            replicas: 1

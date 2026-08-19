@@ -30,6 +30,7 @@ Point somewhere else instead with `KUBEVELA_SRC=/path/to/kubevela`.
 task cluster:local     # create the k3d cluster, once
 task install:local     # build vela-core from KUBEVELA_SRC, deploy it
 task build:cli         # optional: compile `vela`/`kubectl-vela` into ./bin
+task deploy:example    # optional: deploy a sample Application to smoke-test the cluster
 ```
 
 Or without `task` (a [Taskfile](https://taskfile.dev) is included, but every
@@ -79,6 +80,23 @@ Admission webhooks are on by default in that chart
 (`admissionWebhooks.enabled: true`) and self-provision their own TLS via the
 bundled `kube-webhook-certgen` job — no cert-manager needed for this to
 work out of the box.
+
+## Deploying an example Application
+
+`task deploy:example` applies `examples/hello-world-app.yaml` — KubeVela's
+own "first-vela-app" quickstart sample (a `webservice` component with an
+`ingress-1-20` and `scaler` trait), adapted to use a
+`hello-world.127.0.0.1.nip.io` domain so the Ingress resolves to this
+machine's loopback without touching `/etc/hosts`. `webservice`,
+`ingress-1-20`, and `scaler` all ship built into the `vela-core` chart
+itself, so this works right after `install:local` with no addons installed.
+
+```bash
+task deploy:example
+kubectl get application hello-world
+curl http://hello-world.127.0.0.1.nip.io   # once the Deployment is ready
+task undeploy:example   # tear it back down
+```
 
 ## Debugging the controller outside the cluster
 
