@@ -2,7 +2,12 @@
 /bin/
 
 # Editor/IDE
- .idea/
- .vscode/
+ /.idea/
+ /.vscode/
 
 .env
+/.idea/.gitignore
+/.idea/go.imports.xml
+/.idea/kubevela-setup.iml
+/.idea/modules.xml
+/.idea/vcs.xml
